@@ -10,7 +10,7 @@ import java.nio.file.Path;
 public class Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
-    private static final String[] REQUIRED_ENV = {"SEARCH_ROOT"};
+    private static final String[] REQUIRED_ENV = {"SEARCH_ROOT", "SEARCH_SERVER_PORT"};
 
     static void validateEnv(String key) {
         if (System.getenv(key) != null) {
@@ -30,6 +30,8 @@ public class Main {
 
         try {
             RatpackServer.start(ratpackServerSpec -> ratpackServerSpec
+                    .serverConfig(serverConfigBuilder -> serverConfigBuilder
+                            .port(Integer.parseInt(System.getenv("SEARCH_SERVER_PORT"))))
                     .registryOf(registrySpec -> registrySpec
                             .add(searchService))
                     .handlers(new Router()));

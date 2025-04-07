@@ -4,6 +4,7 @@
       <option name="env">
         <map>
           <entry key="SEARCH_ROOT" value="$USER_HOME$/.local/share/wiki" />
+          <entry key="SEARCH_SERVER_PORT" value="5000" />
         </map>
       </option>
       <option name="executionName" />

@@ -21,11 +21,16 @@ public class FileIndex {
 
     FileIndex() {
         try {
-            Files.createDirectory(Path.of("run"));
-            database = DriverManager.getConnection("jdbc:sqlite:" + Path.of("run/index.db"));
+            if (!Files.isDirectory(Path.of("run"))) {
+                Files.createDirectory(Path.of("run"));
+            }
         } catch (IOException e) {
             LOG.error("error when creating run directory");
             throw new RuntimeException(e);
+        }
+
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:" + Path.of("run/index.db"));
         } catch (SQLException e) {
             LOG.error("error when connecting to database");
             throw new RuntimeException(e);
