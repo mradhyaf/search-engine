@@ -16,12 +16,12 @@ public class Engine {
 
     private static final Logger LOG = LoggerFactory.getLogger(Engine.class);
 
-    Path root;
+    Path searchRoot;
     FileIndex fileIndex;
 
-    public Engine(Path root) {
-        this.root = root;
-        this.fileIndex = new FileIndex();
+    public Engine(Path searchRoot) {
+        this.searchRoot = searchRoot;
+        this.fileIndex = new FileIndex(Path.of("run"));
     }
 
     public void initIndex() {
@@ -34,7 +34,7 @@ public class Engine {
         });
 
         try {
-            Files.walkFileTree(root, visitor);
+            Files.walkFileTree(searchRoot, visitor);
         } catch (IOException e) {
             throw new RuntimeException();
         }
@@ -49,13 +49,13 @@ public class Engine {
         }
 
         List<FileInfo> res = fileIndex.getByName(filter.name);
-        res.forEach(item -> item.relativePath = root.relativize(item.absolutePath));
+        res.forEach(item -> item.relativePath = searchRoot.relativize(item.absolutePath));
 
         return res;
     }
 
     public FileInfo search(Path relativePath) {
-        Path absolutePath = root.resolve(relativePath);
+        Path absolutePath = searchRoot.resolve(relativePath);
         return fileIndex.getByPath(absolutePath.toString());
     }
 }
