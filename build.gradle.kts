@@ -1,16 +1,17 @@
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath("io.ratpack:ratpack-gradle:2.0.0-rc-1")
+        classpath("com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.0.0-beta12")
     }
 }
 
 plugins {
-    id("java")
-    id("io.ratpack.ratpack-java") version "2.0.0-rc-1" // https://plugins.gradle.org/plugin/io.ratpack.ratpack-java
-    id("idea")
+    id("io.ratpack.ratpack-java") version "2.0.0-rc-1"
+    id("com.gradleup.shadow") version "9.0.0-beta12"
 }
 
 version = "0.1.0"

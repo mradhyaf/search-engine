@@ -3,7 +3,6 @@ package id.mradhyaf.searchengine.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -19,20 +18,18 @@ public class FileIndex {
 
     Connection database;
 
-    FileIndex() {
+    FileIndex(Path dir) {
         try {
-            if (!Files.isDirectory(Path.of("run"))) {
-                Files.createDirectory(Path.of("run"));
+            if (dir == null) {
+                dir = Files.createTempDirectory(null);
+                LOG.info("using temp dir: {}", dir);
+            } else {
+                Files.createDirectories(dir);
             }
-        } catch (IOException e) {
-            LOG.error("error when creating run directory");
-            throw new RuntimeException(e);
-        }
 
-        try {
-            database = DriverManager.getConnection("jdbc:sqlite:" + Path.of("run/index.db"));
-        } catch (SQLException e) {
-            LOG.error("error when connecting to database");
+            database = DriverManager.getConnection("jdbc:sqlite:" + dir + "/index.db");
+        } catch (Exception e) {
+            LOG.error("error when initializing database file");
             throw new RuntimeException(e);
         }
     }
