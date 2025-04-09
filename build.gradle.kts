@@ -31,6 +31,12 @@ application {
     mainClass.set("id.mradhyaf.searchengine.server.Main")
 }
 
+tasks.shadowJar {
+    archiveBaseName.set("app")
+    archiveClassifier.set("")
+    archiveVersion.set("")
+}
+
 tasks.test {
     useJUnitPlatform()
 }
