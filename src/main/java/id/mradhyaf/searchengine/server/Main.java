@@ -5,33 +5,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ratpack.core.server.RatpackServer;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
-    private static final String[] REQUIRED_ENV = {"SEARCH_ROOT", "SEARCH_SERVER_PORT"};
-
-    static void validateEnv(String key) {
-        if (System.getenv(key) != null) {
-            return;
-        }
-
-        LOG.error("missing {} in environment", key);
-        throw new RuntimeException();
-    }
 
     public static void main(String[] args) {
-        for (String env : REQUIRED_ENV) {
-            validateEnv(env);
+        Path searchRoot = Path.of(System.getProperty("user.home"), "search-root");
+        try {
+            Files.createDirectories(searchRoot);
+        } catch (IOException e) {
+            LOG.error("unable to find search-root directory");
+            throw new RuntimeException(e);
         }
+        LOG.info("search engine searching in: {}", searchRoot.toAbsolutePath());
 
-        SearchService searchService = new SearchService(Path.of(System.getenv("SEARCH_ROOT")));
+        SearchService searchService = new SearchService(searchRoot);
 
         try {
             RatpackServer.start(ratpackServerSpec -> ratpackServerSpec
                     .serverConfig(serverConfigBuilder -> serverConfigBuilder
-                            .port(Integer.parseInt(System.getenv("SEARCH_SERVER_PORT"))))
+                            .port(5050))
                     .registryOf(registrySpec -> registrySpec
                             .add(searchService))
                     .handlers(new Router()));
