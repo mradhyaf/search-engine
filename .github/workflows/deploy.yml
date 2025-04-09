@@ -20,7 +20,7 @@ jobs:
       - name: Download Artifact (Fat JAR)
         uses: actions/download-artifact@v4
         with:
-          name: fat-jar
+          name: app-jar
           path: ./deploy
           run-id: ${{ github.event.workflow_run.id }}
 
