@@ -1,10 +1,8 @@
-name: Deploy
+name: Deploy to EC2
 
 on:
-  workflow_run:
-    workflows: [ Build ]
-    types: [ completed ]
-    branches: [ "*" ]
+  push:
+    branches: [ dev ]
 
 jobs:
   deploy:
