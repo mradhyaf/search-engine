@@ -19,7 +19,6 @@ jobs:
         with:
           name: app-jar
           path: ./deploy
-          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Set up SSH config
         run: |
