@@ -1,12 +1,15 @@
 name: Deploy to EC2
 
 on:
-  push:
-    branches: [ dev ]
+  workflow_run:
+    workflows: [ Build ]
+    types: [ completed ]
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       actions: read
 
@@ -19,7 +22,8 @@ jobs:
         with:
           name: app-jar
           path: ./deploy
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Set up SSH config
         run: |
