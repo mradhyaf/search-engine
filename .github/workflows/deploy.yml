@@ -4,12 +4,14 @@ on:
   workflow_run:
     workflows: [Build]
     types: [completed]
-    branches: [main]
+    branches: [dev]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      actions: read
 
     steps:
       - name: Checkout (needed to access artifacts metadata if needed)
@@ -20,6 +22,7 @@ jobs:
         with:
           name: fat-jar
           path: ./deploy
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: Set up SSH config
         run: |

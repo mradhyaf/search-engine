@@ -32,8 +32,8 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
-      - name: Upload Fat JAR
+      - name: Upload App JAR
         uses: actions/upload-artifact@v4
         with:
-          name: fat-jar
+          name: app-jar
           path: build/libs/app.jar
