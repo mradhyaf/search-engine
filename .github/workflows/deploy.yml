@@ -2,9 +2,9 @@ name: Deploy to EC2
 
 on:
   workflow_run:
-    workflows: [ "Build" ]
-    types: [ "completed" ]
-    branches: [ "dev" ]
+    workflows: [ Build ]
+    types: [ completed ]
+    branches: [ * ]
 
 jobs:
   deploy:
